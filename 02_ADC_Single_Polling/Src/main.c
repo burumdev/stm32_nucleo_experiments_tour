@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "app.h"
+#include "stm32l1xx_hal_adc.h"
 
 /* USER CODE END Includes */
 
@@ -199,7 +200,7 @@ static void MX_ADC_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_96CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_48CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -207,6 +208,7 @@ static void MX_ADC_Init(void)
   /* USER CODE BEGIN ADC_Init 2 */
   // Would add calibration here (for better accuracy) but stm32l152 doesn't support it as an extension.
   /* USER CODE END ADC_Init 2 */
+
 }
 
 /**
@@ -275,6 +277,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
