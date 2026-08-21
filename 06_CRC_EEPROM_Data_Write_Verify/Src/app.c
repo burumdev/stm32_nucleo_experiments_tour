@@ -14,7 +14,7 @@ extern CRC_HandleTypeDef hcrc;
 void app_main() {
     printf("Calculating CRC from file data...\r\n");
     uint32_t fileDataCRC = HAL_CRC_Calculate(&hcrc, EEPROM_DATA, EEPROM_DATA_SIZE);
-    printf("File data CRC calculated as: %lx\r\n\r\n", fileDataCRC);
+    printf("File data CRC calculated as: 0x%lx\r\n\r\n", fileDataCRC);
 
     printf("Writing data to EEPROM...\r\n");
     HAL_FLASHEx_DATAEEPROM_Unlock();
@@ -23,7 +23,7 @@ void app_main() {
         size_t eeprom_address = EEPROM_BASE_ADDR + (i * 4);
         writeStatus = HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_WORD, eeprom_address, EEPROM_DATA[i]);
         if (writeStatus != HAL_OK) {
-            printf("An error occured while writing data to eeprom!\r\n");
+            printf("An error occured while writing data to EEPROM!\r\n");
             break;
         }
     }
@@ -37,7 +37,7 @@ void app_main() {
         }
         printf("Calculating CRC from EEPROM data...\r\n");
         uint32_t eepromCRC = HAL_CRC_Calculate(&hcrc, readbuf, EEPROM_DATA_SIZE);
-        printf("EEPROM data CRC calculated as: %lx\r\n\r\n", eepromCRC);
+        printf("EEPROM data CRC calculated as: 0x%lx\r\n\r\n", eepromCRC);
         if (eepromCRC == fileDataCRC) {
             printf("File CRC and EEPROM CRC match. Data is valid. Congratulations!\r\n");
         }
